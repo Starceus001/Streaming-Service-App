@@ -3,6 +3,7 @@ import 'home_page.dart';
 import 'upload_page.dart';
 import 'settings_page.dart';
 import 'app_drawer.dart';
+import 'streaming_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [HomePage(), UploadPage(), SettingsPage()];
+    final List<Widget> _pages = [HomePage(), UploadPage(), StreamingPage(), SettingsPage()];
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),

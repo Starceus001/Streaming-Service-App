@@ -41,7 +41,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [HomePage(), UploadPage(), StreamingPage(), SettingsPage()];
+    final List<Widget> _pages = [
+      HomePage(),
+      UploadPage(),
+      StreamingPage(),
+      SettingsPage()
+    ];
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),

@@ -42,10 +42,18 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Settings'),
+            title: Text('Streaming'),
             selected: selectedIndex == 2,
             onTap: () {
               onItemTapped(2);
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text('Settings'),
+            selected: selectedIndex == 3,
+            onTap: () {
+              onItemTapped(3);
               Navigator.pop(context);
             },
           ),

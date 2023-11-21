@@ -7,7 +7,7 @@ class UploadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //code can be added from here
     return const Center(
-      child: Text('Home Page',
+      child: Text('Upload Page',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
     );
   }

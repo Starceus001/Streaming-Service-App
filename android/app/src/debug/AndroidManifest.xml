@@ -15,25 +15,3 @@
 
     </application>
 </manifest>
-
-<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.myapp">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <application
-        android:label="HoloStream"
-        android:icon="@mipmap/ic_launcher"
-        tools:replace="android:label">
-"TEST" Need to add ucrop in order to solve the app closing problem
-        Other configurations and activities
-        <activity android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        </activity>
-
-    </application>
-</manifest> -->

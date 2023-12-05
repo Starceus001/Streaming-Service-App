@@ -1,4 +1,3 @@
-// stream key: live_993744240_DufYHsGijuzj1bYQ4TFNR0aK3eHfXN
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -18,9 +17,9 @@ class _StreamingPageState extends State<StreamingPage> {
 
   String clientId = '1k07v26rojuhagzfrahvzqr8d37989';
   String redirectUri = 'http://localhost:0001/oauth';
-  String scope = 'channel:manage:streamkey';
+  String scope = 'channel:manage:broadcast';
 
-  late WebViewController _webViewController; // Hier toegevoegd
+  late WebViewController _webViewController;
 
   @override
   void initState() {
@@ -34,6 +33,7 @@ class _StreamingPageState extends State<StreamingPage> {
         setState(() {});
       });
     });
+    _streamKeyController.text = 'live_993744240_DufYHsGijuzj1bYQ4TFNR0aK3eHfXN';
   }
 
   @override
@@ -55,7 +55,7 @@ class _StreamingPageState extends State<StreamingPage> {
             'Authorization': 'Bearer $accessToken',
             'Content-Type': 'application/json',
           },
-          body: '{"title": "My Twitch Stream", "Test, Test": "Test, Test"}',
+          body: '{"title": "My Twitch Stream", "stream_key": "$streamKey"}',
         );
 
         if (response.statusCode == 200) {
@@ -148,14 +148,17 @@ class TwitchLoginScreen extends StatelessWidget {
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith(redirectUri)) {
             Uri uri = Uri.parse(request.url);
-            String accessToken = uri.fragment.substring(uri.fragment.indexOf('access_token=') + 13);
-            accessToken = accessToken.substring(0, accessToken.indexOf('&'));
+            if (uri.fragment.contains('access_token=')) {
+              String accessToken = uri.fragment
+                  .substring(uri.fragment.indexOf('access_token=') + 13);
+              accessToken = accessToken.substring(0, accessToken.indexOf('&'));
 
-            onAccessTokenReceived(accessToken);
+              onAccessTokenReceived(accessToken);
 
-            Navigator.pop(context);
+              Navigator.pop(context);
 
-            return NavigationDecision.prevent;
+              return NavigationDecision.prevent;
+            }
           }
           return NavigationDecision.navigate;
         },

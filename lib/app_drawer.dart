@@ -17,9 +17,9 @@ class AppDrawer extends StatelessWidget {
               color: Color.fromARGB(255, 139, 72, 255),
             ),
             child: Text(
-              'Drawer Header',
+              'Navigator',
               style: TextStyle(
-                fontFamily: 'PermMark',
+                fontFamily: 'Exo',
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
               ),

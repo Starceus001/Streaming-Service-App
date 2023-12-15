@@ -86,6 +86,9 @@ flutter:
     - family: PermMark
       fonts:
         - asset: fonts/PermanentMarker-Regular.ttf
+    - family: Exo
+      fonts:
+        - asset: fonts/Exo2-Light.ttf
 
   #
   # For details regarding fonts from package dependencies,

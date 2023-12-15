@@ -4,11 +4,33 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'dart:typed_data';
 
+class BackgroundContainer extends StatelessWidget {
+  final Widget child;
+
+  const BackgroundContainer({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints.expand(),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF1A233E), Color(0xFF379994)],
+        ),
+      ),
+      child: SafeArea(
+        child: child,
+      ),
+    );
+  }
+}
+
 class UploadPage extends StatefulWidget {
   const UploadPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _UploadPageState createState() => _UploadPageState();
 }
 
@@ -17,7 +39,6 @@ class _UploadPageState extends State<UploadPage> {
   img.Image? croppedImage;
   img.Image? tempCroppedImage;
 
-  // pick the image from the gallery
   Future<void> _pickImage() async {
     final imagePicker = ImagePicker();
     try {
@@ -28,7 +49,6 @@ class _UploadPageState extends State<UploadPage> {
           pickedImageFile = File(pickedFile.path);
         });
 
-        // call the cropping function
         _cropImage();
       }
     } catch (e) {
@@ -36,27 +56,21 @@ class _UploadPageState extends State<UploadPage> {
     }
   }
 
-// crop the image to show and ask for confirmation
-void _cropImage() {
-  if (pickedImageFile != null) {
-    // load the picked image
-    final rawImage = img.decodeImage(File(pickedImageFile!.path).readAsBytesSync())!;
+  void _cropImage() {
+    if (pickedImageFile != null) {
+      final rawImage = img.decodeImage(File(pickedImageFile!.path).readAsBytesSync())!;
 
-    // set targetSize (when done, get size from settings page)
-    const double targetSize = 224.0;
+      const double targetSize = 224.0;
 
-    // crop the image to a circle
-    tempCroppedImage = img.copyCropCircle(rawImage, radius: targetSize.toInt());
+      tempCroppedImage = img.copyCropCircle(rawImage, radius: targetSize.toInt());
 
-    // show the confirmation dialog
-    _showConfirmationDialog();
+      _showConfirmationDialog();
+    }
   }
-}
 
-// give a popup where the user can accept or deny the selected (cropped) image
 void _showConfirmationDialog() {
-  // set targetSize (when done, get size from settings page)
-    const double targetSize = 224.0;
+  const double targetSize = 224.0;
+  const double borderWidth = 2.0;
 
   showDialog(
     context: context,
@@ -64,16 +78,38 @@ void _showConfirmationDialog() {
       final currentContext = context;
 
       return AlertDialog(
-        title: const Text('Confirm Image'),
+        title: const Text(
+          'Confirm Image',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: const Color(0xFF074A6B),
         content: Column(
           children: [
             if (tempCroppedImage != null)
-              Image.memory(
-                Uint8List.fromList(img.encodePng(tempCroppedImage!)),
-                width: targetSize,
-                height: targetSize,
+              Container(
+                width: targetSize + borderWidth * 2,
+                height: targetSize + borderWidth * 2,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black, width: borderWidth),
+                ),
+                child: Image.memory(
+                  Uint8List.fromList(img.encodePng(tempCroppedImage!)),
+                  width: targetSize,
+                  height: targetSize,
+                ),
               ),
-            const Text('The selected image will be displayed as shown above, would you like to continue?'),
+            const Text(
+              'The selected image will be displayed as shown above, would you like to continue?',
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Exo',
+              ),
+            ),
           ],
         ),
         actions: [
@@ -81,6 +117,9 @@ void _showConfirmationDialog() {
             onPressed: () {
               Navigator.of(currentContext).pop();
             },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+            ),
             child: const Text('No'),
           ),
           TextButton(
@@ -88,6 +127,9 @@ void _showConfirmationDialog() {
               _confirmCrop();
               Navigator.of(currentContext).pop();
             },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+            ),
             child: const Text('Yes'),
           ),
         ],
@@ -96,69 +138,82 @@ void _showConfirmationDialog() {
   );
 }
 
-// the user confirms the cropped image, send it to the webserver
-void _confirmCrop() {
-  if (pickedImageFile != null && tempCroppedImage != null) {
+  void _confirmCrop() {
+    if (pickedImageFile != null && tempCroppedImage != null) {
+      croppedImage = tempCroppedImage;
 
-    // if user confirms, save the cropped image to the main variable
-    croppedImage = tempCroppedImage;
+      File(pickedImageFile!.path).writeAsBytesSync(img.encodePng(croppedImage!));
 
-    // save the cropped image back to the file
-    File(pickedImageFile!.path).writeAsBytesSync(img.encodePng(croppedImage!));
-
-    // trigger a rebuild of the widget tree
-    setState(() {});
-
-    // Perform further actions with the cropped file (croppedImage now holds the final cropped image!)
-// "Brent Code" Add brent his code here to send croppedImage to the selected webserver, give a problem message if no server has been selected in settings
-    // For example, save the cropped file path or upload it to a server
-    // finalVariable = pickedImageFile;
-    // performFurtherAction();
-    // You can show a confirmation message or navigate to the next screen here
-    // print("Cropped image confirmed and stored: ${pickedImageFile!.path}");
-  } else {
-    // handle the case where cropping or saving failed
-    const Text("Saving cropped image failed");
+      setState(() {});
+    } else {
+      const Text("Saving cropped image failed");
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
-    // set targetSize (when done, get size from settings page)
     const double targetSize = 224.0;
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'Upload Page',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-          // button to pick and crop an image
-          ElevatedButton(
-            onPressed: () {
-              // call the _pickImage function when the button is pressed
-              _pickImage();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Select Image'),
-          ),
-          // display the final cropped image in the app
-          if (croppedImage != null)
-            Column(
-              children: [
-                Image.memory(
-                  Uint8List.fromList(img.encodePng(croppedImage!)),
-                  width: targetSize,
-                  height: targetSize,
+    return BackgroundContainer(
+      child: SingleChildScrollView( // Wrap your Column with SingleChildScrollView
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'Upload Page',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Exo',
                 ),
-              ],
-            ),
-        ],
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Welcome to the "Upload" page, here you have acces to a button which will open the device gallery. From here, you can select an image which will be shaped to fit the specifications of the display that the image will eventually be sent to. For the purpose of this app, we will be cutting the image into a circle with the center of this circle at the center of thie provided image with a specified diameter of 224 pixels representing the 224 LEDs on our circular 3D Rotary Display.\n\nThe app will give you a preview of what the image will look like before you submit it. When the image has been submitted, it will be displayed in the circular space on this page as well as sent to the Twitch website where it will be shown. When submitting a new image, it will overwrite the old one.',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Exo',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(16.0),
+                width: targetSize,
+                height: targetSize,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2.0),
+                  borderRadius: BorderRadius.circular((targetSize + 32.0) / 2),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (croppedImage != null)
+                      Image.memory(
+                        Uint8List.fromList(img.encodePng(croppedImage!)),
+                        width: targetSize,
+                        height: targetSize,
+                      ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _pickImage();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Select Image'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -51,8 +51,16 @@ class _BuildHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFF192442),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black,
+            width: 1.0,
+          ),
+        ),
+      ),
       padding: const EdgeInsets.all(16.0),
-      color: const Color(0xFF192442),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

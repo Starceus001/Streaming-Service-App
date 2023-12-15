@@ -10,7 +10,7 @@ void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const appTitle = 'My App';
+  static const appTitle = 'HoloStream';
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: Color(0xFF192442),
+      ),
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,

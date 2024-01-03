@@ -50,8 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Color(0xFF192442),
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF192442),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: IndexedStack(
         index: _selectedIndex,

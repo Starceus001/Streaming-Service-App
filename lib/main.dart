@@ -3,14 +3,14 @@ import 'home_page.dart';
 import 'upload_page.dart';
 import 'settings_page.dart';
 import 'app_drawer.dart';
-import 'streaming_page.dart';
+// import 'streaming_page.dart';
 
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const appTitle = 'My App';
+  static const appTitle = 'HoloStream';
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +44,19 @@ class _MyHomePageState extends State<MyHomePage> {
     final List<Widget> _pages = [
       HomePage(),
       UploadPage(),
-      StreamingPage(),
+      // StreamingPage(),
       SettingsPage()
     ];
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF192442),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,

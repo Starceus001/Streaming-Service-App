@@ -19,8 +19,6 @@ class _StreamingPageState extends State<StreamingPage> {
   String redirectUri = 'http://localhost:0001/oauth';
   String scope = 'channel:manage:broadcast';
 
-  late WebViewController _webViewController;
-
   @override
   void initState() {
     super.initState();
@@ -72,6 +70,70 @@ class _StreamingPageState extends State<StreamingPage> {
   }
 
   void _openTwitchAuthPage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Choose an action"),
+          content: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  _openTwitchAuth();
+                },
+                child: Text('Open Twitch Authentication'),
+              ),
+              SizedBox(height: 16),
+               ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  _launchGoogle();
+                },
+                child: Text('Open Google'),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  _openYouTube();
+                },
+                child: Text('Open YouTube'),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  _openTwitchWebPage();
+                },
+                child: Text('Open Twitch Web Page'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _launchGoogle() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => GoogleSearchPage(),
+    ));
+  }
+
+  void _openYouTube() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => WebViewPage('https://www.youtube.com'),
+    ));
+  }
+
+  void _openTwitchWebPage() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => WebViewPage('https://www.twitch.tv/specialisatie_project'),
+    ));
+  }
+
+  void _openTwitchAuth() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => TwitchLoginScreen(
         clientId: clientId,
@@ -117,6 +179,43 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class WebViewPage extends StatelessWidget {
+  final String url;
+
+  WebViewPage(this.url);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Web View'),
+      ),
+      body: WebView(
+        initialUrl: url,
+        javascriptMode: JavascriptMode.unrestricted,
+      ),
+    );
+  }
+}
+
+// ... rest of the code remains unchanged ...
+
+
+class GoogleSearchPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Google Search'),
+      ),
+      body: WebView(
+        initialUrl: 'https://www.google.com',
+        javascriptMode: JavascriptMode.unrestricted,
       ),
     );
   }

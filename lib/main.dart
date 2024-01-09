@@ -41,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final List<Widget> _pages = [
       HomePage(),
       UploadPage(),

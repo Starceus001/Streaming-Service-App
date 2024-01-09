@@ -8,12 +8,13 @@ class StreamingPage extends StatefulWidget {
   const StreamingPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _StreamingPageState createState() => _StreamingPageState();
 }
 
 class _StreamingPageState extends State<StreamingPage> {
   late CameraController _controller;
-  TextEditingController _streamKeyController = TextEditingController();
+  final TextEditingController _streamKeyController = TextEditingController();
 
   String clientId = '1k07v26rojuhagzfrahvzqr8d37989';
   String redirectUri = 'http://localhost:0001/oauth';
@@ -55,17 +56,9 @@ class _StreamingPageState extends State<StreamingPage> {
           },
           body: '{"title": "My Twitch Stream", "stream_key": "$streamKey"}',
         );
-
-        if (response.statusCode == 200) {
-          print('Stream started successfully');
-        } else {
-          print('Error starting stream: ${response.statusCode}');
-        }
       } catch (e) {
         print('Exception starting stream: $e');
       }
-    } else {
-      print('Camera is not initialized.');
     }
   }
 
@@ -74,7 +67,7 @@ class _StreamingPageState extends State<StreamingPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Choose an action"),
+          title: const Text("Choose an action"),
           content: Column(
             children: [
               ElevatedButton(
@@ -82,31 +75,31 @@ class _StreamingPageState extends State<StreamingPage> {
                   Navigator.pop(context); // Close the dialog
                   _openTwitchAuth();
                 },
-                child: Text('Open Twitch Authentication'),
+                child: const Text('Open Twitch Authentication'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
                ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                   _launchGoogle();
                 },
-                child: Text('Open Google'),
+                child: const Text('Open Google'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                   _openYouTube();
                 },
-                child: Text('Open YouTube'),
+                child: const Text('Open YouTube'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                   _openTwitchWebPage();
                 },
-                child: Text('Open Twitch Web Page'),
+                child: const Text('Open Twitch Web Page'),
               ),
             ],
           ),
@@ -117,19 +110,19 @@ class _StreamingPageState extends State<StreamingPage> {
 
   void _launchGoogle() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => GoogleSearchPage(),
+      builder: (context) => const GoogleSearchPage(),
     ));
   }
 
   void _openYouTube() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => WebViewPage('https://www.youtube.com'),
+      builder: (context) => const WebViewPage('https://www.youtube.com'),
     ));
   }
 
   void _openTwitchWebPage() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => WebViewPage('https://www.twitch.tv/specialisatie_project'),
+      builder: (context) => const WebViewPage('https://www.twitch.tv/specialisatie_project'),
     ));
   }
 
@@ -147,12 +140,12 @@ class _StreamingPageState extends State<StreamingPage> {
   @override
   Widget build(BuildContext context) {
     if (!_controller.value.isInitialized) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Streaming Page'),
+        title: const Text('Streaming Page'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -167,12 +160,12 @@ class _StreamingPageState extends State<StreamingPage> {
                 children: [
                   TextField(
                     controller: _streamKeyController,
-                    decoration: InputDecoration(labelText: 'Stream Key'),
+                    decoration: const InputDecoration(labelText: 'Stream Key'),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _openTwitchAuthPage,
-                    child: Text('Start Streaming'),
+                    child: const Text('Start Streaming'),
                   ),
                 ],
               ),
@@ -187,13 +180,13 @@ class _StreamingPageState extends State<StreamingPage> {
 class WebViewPage extends StatelessWidget {
   final String url;
 
-  WebViewPage(this.url);
+  const WebViewPage(this.url, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Web View'),
+        title: const Text('Web View'),
       ),
       body: WebView(
         initialUrl: url,
@@ -203,17 +196,16 @@ class WebViewPage extends StatelessWidget {
   }
 }
 
-// ... rest of the code remains unchanged ...
-
-
 class GoogleSearchPage extends StatelessWidget {
+  const GoogleSearchPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Google Search'),
+        title: const Text('Google Search'),
       ),
-      body: WebView(
+      body: const WebView(
         initialUrl: 'https://www.google.com',
         javascriptMode: JavascriptMode.unrestricted,
       ),
@@ -227,7 +219,7 @@ class TwitchLoginScreen extends StatelessWidget {
   final String scope;
   final Function(String) onAccessTokenReceived;
 
-  TwitchLoginScreen({
+  const TwitchLoginScreen({super.key, 
     required this.clientId,
     required this.redirectUri,
     required this.scope,
@@ -238,7 +230,7 @@ class TwitchLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Twitch Login'),
+        title: const Text('Twitch Login'),
       ),
       body: WebView(
         initialUrl:
